@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{.ReportName}}</title>
+    <style>
+      /* Estilos CSS personalizados */
+      body {
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        color: red;
+      }
+      p {
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>{{.ReportName}}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{.Content}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Outros elementos HTML aqui -->
+  </body>
+</html>
