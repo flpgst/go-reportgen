@@ -14,6 +14,7 @@ type Conf struct {
 	RABBITMQ_HOST       string `mapstructure:"RABBITMQ_HOST"`
 	RABBITMQ_PORT       string `mapstructure:"RABBITMQ_PORT"`
 	RABBITMQ_QUEUE_NAME string `mapstructure:"RABBITMQ_QUEUE_NAME"`
+	WebServerPort       string `mapstructure:"WEBSERVER_PORT"`
 }
 
 func LoadConfig(path string) (*Conf, error) {

@@ -4,13 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/flpgst/go-reportgen/configs"
 	"github.com/flpgst/go-reportgen/internal/dto"
 	"github.com/flpgst/go-reportgen/internal/infra/database/mongodb"
 	"github.com/flpgst/go-reportgen/internal/infra/queue/interfaces"
 	"github.com/flpgst/go-reportgen/internal/infra/queue/rabbitmq"
+	"github.com/flpgst/go-reportgen/internal/infra/web"
 	"github.com/flpgst/go-reportgen/internal/usecase"
+	"github.com/go-chi/chi/v5"
 	"github.com/streadway/amqp"
 )
 
@@ -32,6 +35,13 @@ func main() {
 
 	reportRepository := mongodb.NewReportRepository(db)
 	createReportUseCase := usecase.NewCreateReportUseCase(reportRepository)
+
+	reportHandler := web.NewWebReportHandler(reportRepository)
+	router := chi.NewRouter()
+	router.Route("/report", func(r chi.Router) {
+		r.Get("/", reportHandler.Get)
+	})
+	go http.ListenAndServe(":"+configs.WebServerPort, router)
 
 	queueConn := QueueConn{
 		queue: rabbitmq.NewRabbitMQConn(configs.RABBITMQ_USER, configs.RABBITMQ_PASSWORD, configs.RABBITMQ_HOST, configs.RABBITMQ_PORT),

@@ -16,7 +16,7 @@ func NewCreateReportUseCase(reportRepository entity.ReportRepositoryInterface) *
 }
 
 func (c *CreateReportUseCase) Execute(input dto.ReportInputDTO) (dto.ReportOutputDTO, error) {
-	report, err := entity.NewReport(input.ReportName)
+	report, err := entity.NewReport(input.ReportName, input.Date)
 	if err != nil {
 		return dto.ReportOutputDTO{}, err
 	}
@@ -26,6 +26,7 @@ func (c *CreateReportUseCase) Execute(input dto.ReportInputDTO) (dto.ReportOutpu
 	dto := dto.ReportOutputDTO{
 		ID:         report.ID,
 		ReportName: report.ReportName,
+		Date:       report.Date,
 	}
 	return dto, nil
 }

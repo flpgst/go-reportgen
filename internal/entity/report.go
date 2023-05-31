@@ -9,11 +9,13 @@ import (
 type Report struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty"`
 	ReportName string             `bson:"reportName,omitempty"`
+	Date       string             `bson:"date,omitempty"`
 }
 
-func NewReport(reportName string) (*Report, error) {
+func NewReport(reportName, date string) (*Report, error) {
 	report := &Report{
 		ReportName: reportName,
+		Date:       date,
 	}
 	err := report.isValid()
 	if err != nil {
@@ -25,6 +27,9 @@ func NewReport(reportName string) (*Report, error) {
 func (r *Report) isValid() error {
 	if r.ReportName == "" {
 		return errors.New("report name cannot be empty")
+	}
+	if r.Date == "" {
+		return errors.New("date cannot be empty")
 	}
 	return nil
 }
