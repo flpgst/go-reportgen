@@ -3,8 +3,8 @@ module github.com/flpgst/go-reportgen
 go 1.20
 
 require (
-	github.com/flpgst/golang-studies/55-CleanArch v0.0.0-20230527022846-e2498a6677ce
 	github.com/go-chi/chi/v5 v5.0.8
+	github.com/google/uuid v1.1.2
 	github.com/spf13/viper v1.16.0
 	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/testify v1.8.4

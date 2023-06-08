@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/flpgst/go-reportgen/internal/dto"
 	"github.com/flpgst/go-reportgen/internal/entity"
+	pdf "github.com/flpgst/go-reportgen/internal/infra/pdf/wkhtmltopdf"
 )
 
 type GetReportUseCase struct {
@@ -17,15 +19,20 @@ func NewGetReportUseCase(reportRepository entity.ReportRepositoryInterface) *Get
 	}
 }
 
-func (r *GetReportUseCase) Execute(input dto.ReportInputDTO) (dto.ReportOutputDTO, error) {
+func (r *GetReportUseCase) Execute(input dto.ReportInputDTO) (*os.File, error) {
 	report, err := r.ReportRepository.GetReport(input.ReportName, input.Date)
 	if err != nil {
-		return dto.ReportOutputDTO{}, err
+		return nil, err
 	}
 	dto := dto.ReportOutputDTO{
 		ReportName: report.ReportName,
 		Date:       report.Date,
 	}
+	pdfReport := pdf.NewPDFReport(dto.ReportName)
+	pdfFile, err := pdfReport.Execute()
+	if err != nil {
+		return nil, err
+	}
 	fmt.Println(dto)
-	return dto, nil
+	return pdfFile, nil
 }

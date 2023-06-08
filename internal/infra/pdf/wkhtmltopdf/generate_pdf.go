@@ -1,10 +1,11 @@
-package main
+package pdf
 
 import (
 	"fmt"
 	"html/template"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
 type PDFReport struct {
@@ -17,35 +18,47 @@ func NewPDFReport(reportName string) *PDFReport {
 	}
 }
 
-func (r *PDFReport) Execute() {
-	templateFile := "template.html"
+func (r *PDFReport) Execute() (*os.File, error) {
+	templateAbsPath, err := filepath.Abs("../../internal/infra/pdf/template.html")
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	fmt.Println(templateAbsPath)
+
 	pdfReport := NewPDFReport("ReportName Teste 1")
 
-	tmpl, err := template.ParseFiles(templateFile)
+	tmpl, err := template.ParseFiles(templateAbsPath)
 	if err != nil {
 		fmt.Println("Error parsing template:", err)
-		return
+		return nil, err
 	}
-	outputFile := "output.html"
-	file, err := os.Create(outputFile)
+
+	htmlOutputFile, err := os.CreateTemp("", "output_*.html")
 	if err != nil {
 		fmt.Println("Error creating html output file:", err)
-		return
+		return nil, err
 	}
-	defer file.Close()
+	defer os.Remove(htmlOutputFile.Name())
 
-	err = tmpl.Execute(file, pdfReport)
+	err = tmpl.Execute(htmlOutputFile, pdfReport)
 	if err != nil {
 		fmt.Println("Error executing template:", err)
-		return
+		return nil, err
 	}
 
-	pdfFile := "output.pdf"
-	cmd := exec.Command("wkhtmltopdf", outputFile, pdfFile)
+	pdfOutputFile, err := os.CreateTemp("", "output_*.pdf")
+	if err != nil {
+		fmt.Println("Error creating pdf output file:", err)
+		return nil, err
+	}
+	defer os.Remove(pdfOutputFile.Name())
+
+	cmd := exec.Command("wkhtmltopdf", htmlOutputFile.Name(), pdfOutputFile.Name())
 	err = cmd.Run()
 	if err != nil {
 		fmt.Println("Error generating PDF:", err)
-		return
+		return nil, err
 	}
-	os.Remove(outputFile)
+	return pdfOutputFile, nil
 }
