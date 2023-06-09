@@ -9,6 +9,7 @@ import (
 	"github.com/flpgst/go-reportgen/configs"
 	"github.com/flpgst/go-reportgen/internal/dto"
 	"github.com/flpgst/go-reportgen/internal/infra/database/mongodb"
+	pdf "github.com/flpgst/go-reportgen/internal/infra/pdf/wkhtmltopdf"
 	"github.com/flpgst/go-reportgen/internal/infra/queue/interfaces"
 	"github.com/flpgst/go-reportgen/internal/infra/queue/rabbitmq"
 	"github.com/flpgst/go-reportgen/internal/infra/web"
@@ -34,9 +35,10 @@ func main() {
 	defer db.Client().Disconnect(context.TODO())
 
 	reportRepository := mongodb.NewReportRepository(db)
+	pdfBuilder := pdf.NewWKHTMLTOPDF()
 	createReportUseCase := usecase.NewCreateReportUseCase(reportRepository)
 
-	reportHandler := web.NewWebReportHandler(reportRepository)
+	reportHandler := web.NewWebReportHandler(reportRepository, pdfBuilder)
 	router := chi.NewRouter()
 	router.Route("/report", func(r chi.Router) {
 		r.Get("/", reportHandler.Get)

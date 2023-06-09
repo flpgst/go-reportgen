@@ -6,19 +6,23 @@ import (
 
 	"github.com/flpgst/go-reportgen/internal/dto"
 	"github.com/flpgst/go-reportgen/internal/entity"
+	"github.com/flpgst/go-reportgen/internal/infra/pdf"
 	"github.com/flpgst/go-reportgen/internal/usecase"
 	"github.com/google/uuid"
 )
 
 type WebReportHandler struct {
 	ReportRepository entity.ReportRepositoryInterface
+	PDFBuilder       pdf.PDFBuilderInterface
 }
 
 func NewWebReportHandler(
 	ReportRepository entity.ReportRepositoryInterface,
+	PDFBuilder pdf.PDFBuilderInterface,
 ) *WebReportHandler {
 	return &WebReportHandler{
 		ReportRepository: ReportRepository,
+		PDFBuilder:       PDFBuilder,
 	}
 }
 
@@ -30,19 +34,25 @@ func (h *WebReportHandler) Get(w http.ResponseWriter, r *http.Request) {
 		Date:       date,
 	}
 
-	output, err := usecase.NewGetReportUseCase(h.ReportRepository).Execute(reportDTO)
+	reportOutput, err := usecase.NewGetReportUseCase(h.ReportRepository).Execute(reportDTO)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer output.Close()
+	pdfFile, err := usecase.NewGeneratePDFUseCase(h.PDFBuilder).Execute(reportOutput)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer pdfFile.Close()
+
 	uniqueID := uuid.New()
 	filename := uniqueID.String() + ".pdf"
 
 	w.Header().Set("Content-Type", "application/pdf")
 	w.Header().Set("Content-Disposition", "attachment; filename="+filename)
 
-	_, err = io.Copy(w, output)
+	_, err = io.Copy(w, pdfFile)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

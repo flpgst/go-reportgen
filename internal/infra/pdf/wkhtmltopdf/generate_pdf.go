@@ -6,27 +6,23 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/flpgst/go-reportgen/internal/dto"
 )
 
-type PDFReport struct {
-	ReportName string
+type WKHTMLTOPDF struct {
 }
 
-func NewPDFReport(reportName string) *PDFReport {
-	return &PDFReport{
-		ReportName: reportName,
-	}
+func NewWKHTMLTOPDF() *WKHTMLTOPDF {
+	return &WKHTMLTOPDF{}
 }
 
-func (r *PDFReport) Execute() (*os.File, error) {
+func (wk *WKHTMLTOPDF) GeneratePDF(dto *dto.ReportOutputDTO) (*os.File, error) {
 	templateAbsPath, err := filepath.Abs("../../internal/infra/pdf/template.html")
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
-	fmt.Println(templateAbsPath)
-
-	pdfReport := NewPDFReport("ReportName Teste 1")
 
 	tmpl, err := template.ParseFiles(templateAbsPath)
 	if err != nil {
@@ -41,7 +37,7 @@ func (r *PDFReport) Execute() (*os.File, error) {
 	}
 	defer os.Remove(htmlOutputFile.Name())
 
-	err = tmpl.Execute(htmlOutputFile, pdfReport)
+	err = tmpl.Execute(htmlOutputFile, dto)
 	if err != nil {
 		fmt.Println("Error executing template:", err)
 		return nil, err
