@@ -17,8 +17,8 @@ func NewGeneratePDFUseCase(pdfBuilder pdf.PDFBuilderInterface) *GeneratePDFUseCa
 	}
 }
 
-func (r *GeneratePDFUseCase) Execute(report *dto.ReportOutputDTO) (*os.File, error) {
-	pdfFile, err := r.PDFBuilder.GeneratePDF(report)
+func (r *GeneratePDFUseCase) Execute(dto *dto.ReportOutputDTO) (*os.File, error) {
+	pdfFile, err := r.PDFBuilder.GeneratePDF(dto)
 	if err != nil {
 		return nil, err
 	}
