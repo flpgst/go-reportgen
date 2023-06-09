@@ -5,17 +5,17 @@ import (
 	"github.com/flpgst/go-reportgen/internal/entity"
 )
 
-type CreateReportUseCase struct {
+type SaveReportUseCase struct {
 	ReportRepository entity.ReportRepositoryInterface
 }
 
-func NewCreateReportUseCase(reportRepository entity.ReportRepositoryInterface) *CreateReportUseCase {
-	return &CreateReportUseCase{
+func NewSaveReportUseCase(reportRepository entity.ReportRepositoryInterface) *SaveReportUseCase {
+	return &SaveReportUseCase{
 		ReportRepository: reportRepository,
 	}
 }
 
-func (c *CreateReportUseCase) Execute(input dto.ReportInputDTO) (dto.ReportOutputDTO, error) {
+func (c *SaveReportUseCase) Execute(input dto.ReportInputDTO) (dto.ReportOutputDTO, error) {
 	report, err := entity.NewReport(input.ReportName, input.Date)
 	if err != nil {
 		return dto.ReportOutputDTO{}, err

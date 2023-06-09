@@ -36,7 +36,7 @@ func main() {
 
 	reportRepository := mongodb.NewReportRepository(db)
 	pdfBuilder := pdf.NewWKHTMLTOPDF()
-	createReportUseCase := usecase.NewCreateReportUseCase(reportRepository)
+	saveReportUseCase := usecase.NewSaveReportUseCase(reportRepository)
 
 	reportHandler := web.NewWebReportHandler(reportRepository, pdfBuilder)
 	router := chi.NewRouter()
@@ -63,7 +63,7 @@ func main() {
 			msg.Nack(false, false)
 			continue
 		}
-		_, err = createReportUseCase.Execute(message)
+		_, err = saveReportUseCase.Execute(message)
 		if err != nil {
 			fmt.Println(err)
 			msg.Nack(false, false)
