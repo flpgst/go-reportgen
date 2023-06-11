@@ -56,7 +56,7 @@ func main() {
 	go queueConn.queue.Consume(ch, msgs, configs.RABBITMQ_QUEUE_NAME)
 
 	for msg := range msgs {
-		var message dto.ReportInputDTO
+		var message dto.ReportDTO
 		err := json.Unmarshal(msg.Body, &message)
 		if err != nil {
 			fmt.Println("Error decoding message:", err)

@@ -29,7 +29,7 @@ func NewWebReportHandler(
 func (h *WebReportHandler) Get(w http.ResponseWriter, r *http.Request) {
 	reportName := r.URL.Query().Get("reportName")
 	date := r.URL.Query().Get("date")
-	reportDTO := dto.ReportInputDTO{
+	reportDTO := dto.ReportDTO{
 		ReportName: reportName,
 		Date:       date,
 	}

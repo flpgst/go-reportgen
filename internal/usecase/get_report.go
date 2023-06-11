@@ -15,12 +15,12 @@ func NewGetReportUseCase(reportRepository entity.ReportRepositoryInterface) *Get
 	}
 }
 
-func (r *GetReportUseCase) Execute(input dto.ReportInputDTO) (*dto.ReportOutputDTO, error) {
+func (r *GetReportUseCase) Execute(input dto.ReportDTO) (*dto.ReportDTO, error) {
 	report, err := r.ReportRepository.GetReport(input.ReportName, input.Date)
 	if err != nil {
 		return nil, err
 	}
-	dto := dto.ReportOutputDTO{
+	dto := dto.ReportDTO{
 		ReportName: report.ReportName,
 		Date:       report.Date,
 	}

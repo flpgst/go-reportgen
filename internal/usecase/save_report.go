@@ -15,16 +15,15 @@ func NewSaveReportUseCase(reportRepository entity.ReportRepositoryInterface) *Sa
 	}
 }
 
-func (c *SaveReportUseCase) Execute(input dto.ReportInputDTO) (dto.ReportOutputDTO, error) {
+func (c *SaveReportUseCase) Execute(input dto.ReportDTO) (dto.ReportDTO, error) {
 	report, err := entity.NewReport(input.ReportName, input.Date)
 	if err != nil {
-		return dto.ReportOutputDTO{}, err
+		return dto.ReportDTO{}, err
 	}
 	if err := c.ReportRepository.Save(report); err != nil {
-		return dto.ReportOutputDTO{}, err
+		return dto.ReportDTO{}, err
 	}
-	dto := dto.ReportOutputDTO{
-		ID:         report.ID,
+	dto := dto.ReportDTO{
 		ReportName: report.ReportName,
 		Date:       report.Date,
 	}

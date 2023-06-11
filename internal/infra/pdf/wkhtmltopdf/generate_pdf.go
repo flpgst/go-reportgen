@@ -17,7 +17,7 @@ func NewWKHTMLTOPDF() *WKHTMLTOPDF {
 	return &WKHTMLTOPDF{}
 }
 
-func (wk *WKHTMLTOPDF) GeneratePDF(dto *dto.ReportOutputDTO) (*os.File, error) {
+func (wk *WKHTMLTOPDF) GeneratePDF(dto *dto.ReportDTO) (*os.File, error) {
 	templateAbsPath, err := filepath.Abs("../../internal/infra/pdf/template.html")
 	if err != nil {
 		fmt.Println(err)

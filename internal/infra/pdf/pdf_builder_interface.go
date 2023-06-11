@@ -7,5 +7,5 @@ import (
 )
 
 type PDFBuilderInterface interface {
-	GeneratePDF(dto *dto.ReportOutputDTO) (*os.File, error)
+	GeneratePDF(dto *dto.ReportDTO) (*os.File, error)
 }

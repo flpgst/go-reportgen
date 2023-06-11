@@ -2,14 +2,11 @@ package entity
 
 import (
 	"errors"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Report struct {
-	ID         primitive.ObjectID `bson:"_id,omitempty"`
-	ReportName string             `bson:"reportName,omitempty"`
-	Date       string             `bson:"date,omitempty"`
+	ReportName string
+	Date       string
 }
 
 func NewReport(reportName, date string) (*Report, error) {
