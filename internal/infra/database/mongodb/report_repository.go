@@ -2,12 +2,16 @@ package mongodb
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/flpgst/go-reportgen/internal/entity"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
+
+type reportFilter struct {
+	ReportName string `bson:"reportName,omitempty"`
+	Date       string `bson:"date,omitempty"`
+}
 
 type ReportRepository struct {
 	Db *mongo.Database
@@ -22,17 +26,26 @@ func NewReportRepository(db *mongo.Database) *ReportRepository {
 func (r *ReportRepository) Save(report *entity.Report) error {
 	reportsCollection := r.Db.Collection("reports")
 
-	result, err := reportsCollection.InsertOne(context.TODO(), &report)
+	doc := bson.M{
+		"reportName": report.ReportName,
+		"date":       report.Date,
+	}
+
+	_, err := reportsCollection.InsertOne(context.TODO(), doc)
 	if err != nil {
 		return err
 	}
-	fmt.Println(result.InsertedID)
 	return nil
 }
 
 func (r *ReportRepository) GetReport(name, date string) (*entity.Report, error) {
 	reportsCollection := r.Db.Collection("reports")
-	filter := bson.M{"reportName": name, "date": date}
+
+	filter := reportFilter{
+		ReportName: name,
+		Date:       date,
+	}
+
 	var report entity.Report
 	err := reportsCollection.FindOne(context.TODO(), filter).Decode(&report)
 	if err != nil {
