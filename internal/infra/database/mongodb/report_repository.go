@@ -29,6 +29,9 @@ func (r *ReportRepository) Save(report *entity.Report) error {
 	doc := bson.M{
 		"reportName": report.ReportName,
 		"date":       report.Date,
+		"header":     report.Header,
+		"body":       report.Body,
+		"footer":     report.Footer,
 	}
 
 	_, err := reportsCollection.InsertOne(context.TODO(), doc)

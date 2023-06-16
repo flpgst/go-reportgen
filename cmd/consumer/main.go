@@ -63,7 +63,7 @@ func main() {
 			msg.Nack(false, false)
 			continue
 		}
-		_, err = saveReportUseCase.Execute(message)
+		_, err = saveReportUseCase.Execute(&message)
 		if err != nil {
 			fmt.Println(err)
 			msg.Nack(false, false)

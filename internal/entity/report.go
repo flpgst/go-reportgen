@@ -7,12 +7,18 @@ import (
 type Report struct {
 	ReportName string
 	Date       string
+	Header     []string
+	Body       []string
+	Footer     []string
 }
 
-func NewReport(reportName, date string) (*Report, error) {
+func NewReport(reportName, date string, header, body, footer []string) (*Report, error) {
 	report := &Report{
 		ReportName: reportName,
 		Date:       date,
+		Header:     header,
+		Body:       body,
+		Footer:     footer,
 	}
 	err := report.isValid()
 	if err != nil {

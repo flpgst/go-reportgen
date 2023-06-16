@@ -23,6 +23,9 @@ func (r *GetReportUseCase) Execute(input dto.ReportDTO) (*dto.ReportDTO, error) 
 	dto := dto.ReportDTO{
 		ReportName: report.ReportName,
 		Date:       report.Date,
+		Header:     report.Header,
+		Body:       report.Body,
+		Footer:     report.Footer,
 	}
 	return &dto, nil
 }
