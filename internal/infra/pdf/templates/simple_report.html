@@ -18,19 +18,50 @@
   </head>
   <body>
     <h1>{{.ReportName}}</h1>
+    <h2>{{.Date}}</h2>
     <table>
       <thead>
         <tr>
-          <th>Data</th>
+          {{range .Header}}
+          <th>{{.}}</th>
+          {{end}}
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>{{.Date}}</td>
+          {{range .Body}}
+          <td>{{.}}</td>
+          {{end}}
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          {{range .Footer}}
+          <td>{{.}}</td>
+          {{end}}
+        </tr>
+      </tfoot>
     </table>
 
     <!-- Outros elementos HTML aqui -->
   </body>
 </html>
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border: 1px solid black;
+    padding: 8px;
+  }
+  td {
+    text-align: left;
+  }
+  th {
+    text-align: center;
+  }
+</style>
