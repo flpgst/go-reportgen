@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{.ReportName}}</title>
+    <link rel="stylesheet" href="{{.TemplateDir}}/styles.css" />
+  </head>
+  <body>
+    <h1>{{.ReportName}}</h1>
+    <h2>{{.Date}}</h2>
+
+    <table>
+      {{template "header" .Header}} {{template "body" .Body}} {{template
+      "footer" .Footer}}
+    </table>
+  </body>
+</html>

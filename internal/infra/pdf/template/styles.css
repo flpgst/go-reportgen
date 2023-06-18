@@ -1,0 +1,26 @@
+body {
+  font-family: Arial, sans-serif;
+}
+h1 {
+  color: red;
+}
+p {
+  color: #666;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid black;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid black;
+}
+th {
+  text-align: center;
+}
+td {
+  text-align: left;
+}
