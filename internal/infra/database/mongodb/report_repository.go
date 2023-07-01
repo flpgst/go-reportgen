@@ -32,6 +32,7 @@ func (r *ReportRepository) Save(report *entity.Report) error {
 		"header":     report.Header,
 		"body":       report.Body,
 		"footer":     report.Footer,
+		"template":   report.Template,
 	}
 
 	_, err := reportsCollection.InsertOne(context.TODO(), doc)

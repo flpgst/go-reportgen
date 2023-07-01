@@ -10,6 +10,22 @@ import (
 	"github.com/flpgst/go-reportgen/internal/dto"
 )
 
+type ReportTemplate struct {
+	TemplateName string
+	TableHeader  string
+	TableBody    string
+	TableFooter  string
+}
+
+type ReportData struct {
+	ReportName  string
+	Date        string
+	Header      []string
+	Body        []string
+	Footer      []string
+	TemplateDir string
+}
+
 type WKHTMLTOPDF struct {
 }
 
@@ -30,11 +46,18 @@ func (wk *WKHTMLTOPDF) GeneratePDF(dto *dto.ReportDTO) (*os.File, error) {
 	}
 	tmpl := template.New("")
 
+	reportTemplate := &ReportTemplate{
+		TemplateName: fmt.Sprintf("%s.html", dto.Template.TemplateName),
+		TableHeader:  fmt.Sprintf("table-header/%s.html", dto.Template.TableHeader),
+		TableBody:    fmt.Sprintf("table-body/%s.html", dto.Template.TableBody),
+		TableFooter:  fmt.Sprintf("table-footer/%s.html", dto.Template.TableFooter),
+	}
+
 	templateFiles := []string{
-		filepath.Join(templateDir, "template.html"),
-		filepath.Join(templateDir, "header/simple_header.html"),
-		filepath.Join(templateDir, "body/simple_body.html"),
-		filepath.Join(templateDir, "footer/simple_footer.html"),
+		filepath.Join(templateDir, reportTemplate.TemplateName),
+		filepath.Join(templateDir, reportTemplate.TableHeader),
+		filepath.Join(templateDir, reportTemplate.TableBody),
+		filepath.Join(templateDir, reportTemplate.TableFooter),
 	}
 
 	tmpl, err = tmpl.ParseFiles(templateFiles...)
@@ -50,14 +73,7 @@ func (wk *WKHTMLTOPDF) GeneratePDF(dto *dto.ReportDTO) (*os.File, error) {
 	}
 	defer os.Remove(htmlOutputFile.Name())
 
-	data := struct {
-		ReportName  string
-		Date        string
-		Header      []string
-		Body        []string
-		Footer      []string
-		TemplateDir string
-	}{
+	data := &ReportData{
 		ReportName:  dto.ReportName,
 		Date:        dto.Date,
 		Header:      dto.Header,
@@ -66,7 +82,7 @@ func (wk *WKHTMLTOPDF) GeneratePDF(dto *dto.ReportDTO) (*os.File, error) {
 		TemplateDir: templateDir,
 	}
 
-	err = tmpl.ExecuteTemplate(htmlOutputFile, "template.html", data)
+	err = tmpl.ExecuteTemplate(htmlOutputFile, reportTemplate.TemplateName, data)
 	if err != nil {
 		fmt.Println("Error executing template:", err)
 		return nil, err

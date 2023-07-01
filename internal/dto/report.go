@@ -6,4 +6,12 @@ type ReportDTO struct {
 	Header     []string
 	Body       []string
 	Footer     []string
+	Template   ReportTemplate
+}
+
+type ReportTemplate struct {
+	TemplateName string
+	TableHeader  string
+	TableBody    string
+	TableFooter  string
 }

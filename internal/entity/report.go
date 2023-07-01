@@ -10,15 +10,24 @@ type Report struct {
 	Header     []string
 	Body       []string
 	Footer     []string
+	Template   ReportTemplate
 }
 
-func NewReport(reportName, date string, header, body, footer []string) (*Report, error) {
+type ReportTemplate struct {
+	TemplateName string
+	TableHeader  string
+	TableBody    string
+	TableFooter  string
+}
+
+func NewReport(reportName, date string, header, body, footer []string, template ReportTemplate) (*Report, error) {
 	report := &Report{
 		ReportName: reportName,
 		Date:       date,
 		Header:     header,
 		Body:       body,
 		Footer:     footer,
+		Template:   template,
 	}
 	err := report.isValid()
 	if err != nil {
