@@ -17,12 +17,12 @@ type Conf struct {
 	WebServerPort       string `mapstructure:"WEBSERVER_PORT"`
 }
 
-func LoadConfig(path string) (*Conf, error) {
+func LoadConfig(path, envFile string) (*Conf, error) {
 	var cfg *Conf
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)
-	viper.SetConfigFile(".env")
+	viper.SetConfigFile(envFile)
 	viper.AutomaticEnv()
 	err := viper.ReadInConfig()
 	if err != nil {

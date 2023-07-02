@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/flpgst/go-reportgen/configs"
 	"github.com/flpgst/go-reportgen/internal/dto"
@@ -22,8 +23,14 @@ type QueueConn struct {
 	queue interfaces.RabbitMQInterface
 }
 
+var envFile = ".env"
+
 func main() {
-	configs, err := configs.LoadConfig(".")
+	if envFileEnv := os.Getenv("ENV_FILE"); envFileEnv != "" {
+		envFile = envFileEnv
+	}
+
+	configs, err := configs.LoadConfig(".", envFile)
 	if err != nil {
 		panic(err)
 	}
