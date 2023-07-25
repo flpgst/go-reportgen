@@ -1,9 +1,11 @@
 {{define "body"}}
 <tbody>
+  {{range .}}
   <tr>
     {{range .}}
     <td>{{.}}</td>
     {{end}}
   </tr>
+  {{end}}
 </tbody>
 {{end}}

@@ -8,7 +8,7 @@ type Report struct {
 	ReportName string
 	Date       string
 	Header     []string
-	Body       []string
+	Body       [][]string
 	Footer     []string
 	Template   ReportTemplate
 }
@@ -20,7 +20,7 @@ type ReportTemplate struct {
 	TableFooter  string
 }
 
-func NewReport(reportName, date string, header, body, footer []string, template ReportTemplate) (*Report, error) {
+func NewReport(reportName, date string, header []string, body [][]string, footer []string, template ReportTemplate) (*Report, error) {
 	report := &Report{
 		ReportName: reportName,
 		Date:       date,

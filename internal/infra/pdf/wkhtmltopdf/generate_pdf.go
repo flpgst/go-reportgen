@@ -21,7 +21,7 @@ type ReportData struct {
 	ReportName  string
 	Date        string
 	Header      []string
-	Body        []string
+	Body        [][]string
 	Footer      []string
 	TemplateDir string
 }

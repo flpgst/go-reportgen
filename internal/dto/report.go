@@ -4,7 +4,7 @@ type ReportDTO struct {
 	ReportName string
 	Date       string
 	Header     []string
-	Body       []string
+	Body       [][]string
 	Footer     []string
 	Template   ReportTemplate
 }
